@@ -1,0 +1,3 @@
+set FLASK_APP = run.py
+or
+ $env:FLASK_APP = "run.py"
