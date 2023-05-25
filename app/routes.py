@@ -2,7 +2,7 @@ from flask import jsonify, request, Blueprint
 
 from app.models import Order, Session
 
-from .controllers import delete_order_by_id, get_all_orders,create_new_order, get_user_orders, update_order_by_id
+from .controllers import delete_order_by_id, get_all_orders,create_new_order, get_user_orders, update_order_by_id, get_order_by_id
 
 order_routes = Blueprint("orders", __name__)
 
@@ -14,6 +14,7 @@ def get_orders():
     except Exception as e:
         return jsonify({"message": "Failed to fetch orders", "error": str(e)}), 400
 
+
 @order_routes.route('/create',methods=['POST'])
 def create_order():
     order_data = request.get_json()
@@ -23,6 +24,7 @@ def create_order():
     except ValueError as e:
         return jsonify({"message": str(e)}), 400
 
+
 @order_routes.route('/user/<int:user_id>',methods=['GET'])
 def get_user_orders_by_id(user_id):
     try:
@@ -31,6 +33,14 @@ def get_user_orders_by_id(user_id):
 
     except ValueError as e:
         return jsonify({"message": str(e)}), 400
+
+
+@order_routes.route('/<order_id>', methods=['GET'])
+def get_order_detailes(order_id):
+    order = get_order_by_id(order_id)
+    if order:
+        return jsonify({"order": order})
+    return jsonify({"message": "Order not found"}), 404
 
 
 @order_routes.route('/<order_id>', methods=['DELETE'])

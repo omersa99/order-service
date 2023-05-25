@@ -18,6 +18,27 @@ def get_all_orders():
         })
     return data
 
+def get_order_by_id(order_id):
+    try:
+        session = Session()
+        order = session.query(Order).get(order_id)
+
+        if order:
+            return {
+                "order_id": order.id,
+                "user_id": order.user_id,
+                "stock_id": order.stock_id,
+                "type": order.type,
+                "price": order.price,
+                "shares": order.shares,
+                "executed": order.executed,
+                "created_at": order.created_at
+            }
+        else:
+            return None
+    except Exception as e:
+        raise e
+
 def create_new_order(order_data):
     try:
         user_id = order_data.get('user_id')
