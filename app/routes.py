@@ -36,11 +36,15 @@ def get_user_orders_by_id(user_id):
 
 
 @order_routes.route('/<order_id>', methods=['GET'])
-def get_order_detailes(order_id):
-    order = get_order_by_id(order_id)
-    if order:
-        return jsonify({"order": order})
-    return jsonify({"message": "Order not found"}), 404
+def get_order(order_id):
+    try:
+        order = get_order_by_id(order_id)
+        if order:
+            return jsonify({"order": order}), 200
+        else:
+            return jsonify({"message": "Order not found"}), 404
+    except Exception as e:
+        return jsonify({"message": "Failed to retrieve order", "error": str(e)}), 400
 
 
 @order_routes.route('/<order_id>', methods=['DELETE'])
